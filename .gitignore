@@ -163,3 +163,5 @@ benchmark/methods/instruct-p2p
 benchmark/methods/glide/inputs
 data/
 *.ckpt
+*.pt
+*.lock
