@@ -159,6 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-lomoe/
+benchmark/methods/instruct-p2p
+benchmark/methods/glide/inputs
 data/
-benchmark/
