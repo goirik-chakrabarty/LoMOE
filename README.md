@@ -1,6 +1,6 @@
 ## LoMOE : LoMOE: Localized Multi-Object Editing via Multi-Diffusion
 
-![alt text](logo.png "lomoe")
+![alt text](LoMOE.png "lomoe")
 
 ## Description
 `lomoe` contains an implementation of an algorithm to edit _multiple objects_ in a _single pass_ using a diffusion model. All the code has been written in [Python 3](https://www.python.org).
