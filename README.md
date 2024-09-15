@@ -11,6 +11,7 @@ This code was tested with `python=3.9`, `pytorch=2.0.1` and `torchvision=0.15.2`
 Create a conda environment with the following dependencies:
 ```
 conda create -n lomoe python=3.9
+conda activate lomoe
 conda install pytorch==2.0.1 torchvision==0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install accelerate==0.20.3 diffusers==0.12.1 einops==0.7.0 ipython transformers==4.26.1 salesforce-lavis==1.0.2
 ```
