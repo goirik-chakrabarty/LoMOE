@@ -78,18 +78,9 @@ def calculate_global_ssim_loss(outputs, inputs):
 
 #--------------------------------------------------------------#
 
-# folder_name = 'blended_latent_diffusion'
-# folder_name = 'proposed_method'
-# folder_name = 'sdedit'
-
-# here it's method_seed 
-# folder_name = 'bld_66'
-# folder_name = 'ours_10'
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--folder_name", required=True, type=str)
 args = parser.parse_args()
-# CUDA_VISIBLE_DEVICES=0 python compute_metrics.py --folder_name ours
 
 print("Metrics for folder : ", args.folder_name)
 
@@ -104,7 +95,7 @@ all_struct = []
 
 import json
 
-with open('/home/prathosh/aditya/DirectInversion/dataDI_LOMOE_v2.json') as f:
+with open('../../data/LoMOE-Bench/LoMOE.json') as f:
     editing_prompts = json.load(f)
 
 def get_bg_mask(mask_path, device, size):
@@ -114,7 +105,7 @@ def get_bg_mask(mask_path, device, size):
         final_mask += np.array(Image.open(m).resize(size))
     return torch.tensor((255 - final_mask)/255.0, dtype=torch.float32).to(device)
 
-with open("/home/prathosh/goirik/LOMOE_v2/target_prompts.txt", 'r') as f:
+with open("../../data/LoMOE-Bench/utils/target_prompts.txt", 'r') as f:
     img_tgt_prompts = f.read().splitlines()
 
 for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
@@ -127,7 +118,7 @@ for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
         image = Image.open(image_path)
         inputs = processor(text=None, images=image, return_tensors="pt").to(device)
 
-        caption = os.path.join('/home/prathosh/aditya/DirectInversion', editing_prompts[image_name.split('_')[0].split('.')[0]]["bg_path"])
+        caption = os.path.join('PATH_TO_INVERSION_OUTPUT_FOR_ALL_IMAGES', editing_prompts[image_name.split('_')[0].split('.')[0]]["bg_path"])
         text_inputs = processor(caption, return_tensors="pt", padding=True, truncation=True).to(device)
 
         with torch.no_grad():
@@ -135,7 +126,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
             text_features = model.get_text_features(**text_inputs)
 
         similarity_score = (image_features @ text_features.T).mean()
-        # print(f"CLIP Similarity Score: {similarity_score.item()}")
         all_clip.append(similarity_score.item())
 
 
@@ -147,7 +137,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
             text_features = model.get_text_features(**text_inputs)
 
         similarity_score = (image_features @ text_features.T).mean()
-        # print(f"CLIP Similarity Score: {similarity_score.item()}")
         all_tgtclip.append(similarity_score.item())
 
         #--------------------------------------------------------------#
@@ -156,7 +145,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
         img1 = torch.tensor(2 * (np.array(image)/255.0) - 1).unsqueeze(0).permute(0, 3, 1, 2).type(torch.float32).to(device)
 
         d = loss_fn_alex(torch.mul(mask, img0), torch.mul(mask, img1))
-        # print(f"BG-LPIPS Score : {d.item()}")
         all_bglpips.append(d.item())
 
         #--------------------------------------------------------------#
@@ -169,7 +157,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable='True'):
         sample['A_global'] = global_A_patches(A)
         sample['B_global'] = global_B_patches(B)
 
-        # print(f"Structure Dist : {calculate_global_ssim_loss(sample['A_global'], sample['B_global'])}")
         all_struct.append(calculate_global_ssim_loss(sample['A_global'], sample['B_global']).detach().cpu())
 
         #---------------------------------------------------------------#
@@ -192,5 +179,3 @@ print("Average BG PSNR : {:.5f} +- {:.5f}".format(np.mean(all_bgpsnr), np.std(al
 print("Average BG MSE : {:.5f} +- {:.5f}".format(np.mean(all_bgmse), np.std(all_bgmse)))
 print("Average BG SSIM : {:.5f} +- {:.5f}".format(np.mean(all_bgssim), np.std(all_bgssim)))
 print("Average Structure Distance : {:.5f} +- {:.5f}".format(np.mean(all_struct), np.std(all_struct)))
-
-CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 6_lomo/ours_35

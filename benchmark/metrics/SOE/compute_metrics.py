@@ -95,7 +95,7 @@ all_struct = []
 
 import json
 
-with open('/home/prathosh/goirik/PIE-Bench_v1/PIE-Bench_v1.json') as f:
+with open('../../data/LoSOE-Bench/LoSOE.json') as f:
     editing_prompts = json.load(f)
 
 for image_name in tqdm(os.listdir(args.folder_name), disable=True):
@@ -176,5 +176,3 @@ print("Average Structure Distance : {:.5f} +- {:.5f}".format(np.mean(all_struct)
 
 with open('{}_metrics.pickle'.format(args.folder_name), 'wb') as f:
     pickle.dump((all_clip, all_tgtclip, all_bglpips, all_bgpsnr, all_bgmse, all_bgssim, all_struct), f)
-
-# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 6_lomo/ours_10

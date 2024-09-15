@@ -19,20 +19,26 @@ pip install accelerate==0.20.3 diffusers==0.12.1 einops==0.7.0 ipython transform
 
 ### Usage ###
 
-Start by downloading the SOE and MOE datasets from our [project page](https://lomoe-tcs.github.io/) to `./data`.
+Start by downloading the SOE and MOE datasets from our [project page](https://lomoe-tcs.github.io/) to `./benchmark/data`.
 
-To generate the prompt, inverted latent, and store intermediate latents, first run the inversion script located at `./lomoe/invert/src/inversion.py`. Then, to apply edits, use `./lomoe/edit/main.py`.
+To generate the prompt, inverted latent, and store intermediate latents for an image, first run the inversion script located at `./lomoe/invert/inversion.py`. Then, to apply edits, use `./lomoe/edit/main.py`. A sample image and corresponding masks for single and multi-object edit operations are provided in `./lomoe/sample/`.
 
 #### Inversion ####
 
-The `invert/src/inversion.py` script takes the following arguments
+The `invert/inversion.py` script takes the following arguments
 * `--input_image` : Path to the image.
 * `--results_folder` : Path to store the prompt, inverted and intermediate latents.
 
 ```
-CUDA_VISIBLE_DEVICES=0 python invert/src/inversion.py  \
-        --input_image "sample/add/init_image.jpg" \
-        --results_folder "output/add"
+CUDA_VISIBLE_DEVICES=0 python invert/inversion.py  \
+        --input_image "sample/single/init_image.jpg" \
+        --results_folder "invert/output/single"
+```
+
+```
+CUDA_VISIBLE_DEVICES=0 python invert/inversion.py  \
+        --input_image "sample/multi/init_image.png" \
+        --results_folder "invert/output/multi"
 ```
 
 #### Edit ####
@@ -59,34 +65,56 @@ The `edit/main.py` script takes the following arguments
 * `--save_path` : Path to save the merged reconstructed and edited image.
 
 ```
-CUDA_VISIBLE_DEVICES=2 python edit/main.py \
-  --mask_paths "sample/add/mask_1.jpg" \
-  --bg_prompt "output/add/prompt/init_image.txt" \
-  --bg_negative "output/add/prompt/init_image.txt" \
+CUDA_VISIBLE_DEVICES=0 python edit/main.py \
+  --mask_paths "sample/single/mask_1.jpg" \
+  --bg_prompt "invert/output/single/prompt/init_image.txt" \
+  --bg_negative "invert/output/single/prompt/init_image.txt" \
   --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" \
   --H 512 \
   --W 512 \
   --bootstrapping 20 \
-  --latent 'output/add/inversion/init_image.pt' \
-  --latent_list 'output/add/latentlist/init_image.pt' \
-  --rec_path 'out_rec.png' \
-  --edit_path 'out.png' \
+  --latent 'invert/output/single/inversion/init_image.pt' \
+  --latent_list 'invert/output/single/latentlist/init_image.pt' \
+  --rec_path 'results/single/1_reconstruction.png' \
+  --edit_path 'results/single/2_edit.png' \
   --fg_prompts "a red dog collar" \
   --seed 1234 \
-  --save_path 'output/add/merged.png'
+  --save_path 'results/single/3_merged.png'
 ```
 
-A set of sample images for various edit operations are provided in `./lomoe/sample/`.
+```
+CUDA_VISIBLE_DEVICES=0 python edit/main.py \
+  --mask_paths "sample/multi/mask_1.png" "sample/multi/mask_2.png" \
+  --bg_prompt "invert/output/multi/prompt/init_image.txt" \
+  --bg_negative "invert/output/multi/prompt/init_image.txt" \
+  --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" \
+  --H 512 \
+  --W 512 \
+  --bootstrapping 20 \
+  --latent 'invert/output/multi/inversion/init_image.pt' \
+  --latent_list 'invert/output/multi/latentlist/init_image.pt' \
+  --rec_path 'results/multi/1_reconstruction.png' \
+  --edit_path 'results/multi/2_edit.png' \
+  --fg_prompts "a crochet bird" "an origami bird" \
+  --num_fgmasks 2 \
+  --seed 1234 \
+  --save_path 'results/multi/3_merged.png'
+```
 
 ### Results ###
 
-#### Single Object Edits
+![Results](./assets/Teaser.png)
 
-![SOE](./assets/SOE.png)
+### Metrics ###
 
-#### Multi Object Edits
+To compute the _classical_ and _neural_ metrics, use `compute_metrics.py` in `./benchmark/metrics/{SOE/MOE}`. This includes the SRC and TGT Clip Scores, BG LPIPS, BG PSNR, BG MSE, BG SSIM and the Structural Distance. The `compute_aesthetic.py` in `./benchmark/metrics/{SOE/MOE}` computes the _aesthetic_ metrics including HPS, IR and Aesthetic Score. This file also requires additional dependencies, namely [HPSv2](https://github.com/tgxs002/HPSv2) and [ImageReward](https://github.com/THUDM/ImageReward).
 
-![MOE](./assets/MOE.png)
+**NOTE**: The `compute_metrics.py` and `compute_aesthetic.py` scripts expect a folder containing edits for all images in the dataset. Please modify the code to run them on a smaller subset or single images.
+
+```
+CUDA_VISIBLE_DEVICES=0 python compute_metrics.py --folder_name PATH_TO_SAVED_EDITS
+CUDA_VISIBLE_DEVICES=0 python compute_aesthetic.py --folder_name PATH_TO_SAVED_EDITS
+```
 
 ## Citation
 
