@@ -20,8 +20,6 @@ from scheduler import DDIMInverseScheduler
 from lavis.models import load_model_and_preprocess
 from transformers import T5Tokenizer, AutoTokenizer, T5ForConditionalGeneration, BloomForCausalLM
 
-
-
 """
     Load sentence embeddings for a list of sentences.
 

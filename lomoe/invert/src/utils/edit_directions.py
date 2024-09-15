@@ -6,7 +6,6 @@ if torch.cuda.is_available():
 else:
     device = "cpu"
 
-
 """
 This function takes in a task name and returns the direction in the embedding space that transforms class A to class B for the given task.
 

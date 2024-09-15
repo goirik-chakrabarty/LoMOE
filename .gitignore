@@ -159,9 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-benchmark/methods/instruct-p2p
-benchmark/methods/glide/inputs
-data/
 *.ckpt
 *.pt
 *.lock
+benchmark/data/

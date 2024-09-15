@@ -8,7 +8,6 @@ import json
 import requests
 import random
 
-
 """
 Returns the list of directions currently available in the HF library
 """

@@ -78,18 +78,9 @@ def calculate_global_ssim_loss(outputs, inputs):
 
 #--------------------------------------------------------------#
 
-# folder_name = 'blended_latent_diffusion'
-# folder_name = 'proposed_method'
-# folder_name = 'sdedit'
-
-# here it's method_seed 
-# folder_name = 'bld_66'
-# folder_name = 'ours_10'
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--folder_name", required=True, type=str)
 args = parser.parse_args()
-# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 6_lomo/ours_10
 
 print("Metrics for folder : ", args.folder_name)
 
@@ -109,10 +100,6 @@ with open('/home/prathosh/goirik/PIE-Bench_v1/PIE-Bench_v1.json') as f:
 
 for image_name in tqdm(os.listdir(args.folder_name), disable=True):
     if image_name.endswith(".png") or image_name.endswith(".jpg") or image_name.endswith(".JPEG"):
-        # print(image_name)
-        # use either png or jpg
-        # original = Image.open(os.path.join('images', image_name.split('.')[0] + '.png'))
-        # mask = torch.tensor((255 - np.array(Image.open(os.path.join('masks', image_name.split('.')[0] + '.png')).resize(original.size)))/255.0, dtype=torch.float32).to(device)
         if len(image_name.split('.')[0]) == 12: 
             IMAGE_NAME = image_name.split('.')[0]
         else:
@@ -134,7 +121,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable=True):
             text_features = model.get_text_features(**text_inputs)
 
         similarity_score = (image_features @ text_features.T).mean()
-        # print(f"CLIP Similarity Score: {similarity_score.item()}")
         all_clip.append(similarity_score.item())
 
         tgt_prompt = editing_prompts[IMAGE_NAME]["editing_prompt"].replace("[", "").replace("]", "")
@@ -145,7 +131,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable=True):
             text_features = model.get_text_features(**text_inputs)
 
         similarity_score = (image_features @ text_features.T).mean()
-        # print(f"CLIP Similarity Score: {similarity_score.item()}")
         all_tgtclip.append(similarity_score.item())
 
         #--------------------------------------------------------------#
@@ -154,7 +139,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable=True):
         img1 = torch.tensor(2 * (np.array(image)/255.0) - 1).unsqueeze(0).permute(0, 3, 1, 2).type(torch.float32).to(device)
 
         d = loss_fn_alex(torch.mul(mask, img0), torch.mul(mask, img1))
-        # print(f"BG-LPIPS Score : {d.item()}")
         all_bglpips.append(d.item())
 
         #--------------------------------------------------------------#
@@ -167,7 +151,6 @@ for image_name in tqdm(os.listdir(args.folder_name), disable=True):
         sample['A_global'] = global_A_patches(A)
         sample['B_global'] = global_B_patches(B)
 
-        # print(f"Structure Dist : {calculate_global_ssim_loss(sample['A_global'], sample['B_global'])}")
         all_struct.append(calculate_global_ssim_loss(sample['A_global'], sample['B_global']).detach().cpu())
 
         #---------------------------------------------------------------#
@@ -194,6 +177,4 @@ print("Average Structure Distance : {:.5f} +- {:.5f}".format(np.mean(all_struct)
 with open('{}_metrics.pickle'.format(args.folder_name), 'wb') as f:
     pickle.dump((all_clip, all_tgtclip, all_bglpips, all_bgpsnr, all_bgmse, all_bgssim, all_struct), f)
 
-# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py
-# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 4_glide/glide_0
-# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 4_glide/glide_10
+# CUDA_VISIBLE_DEVICES=2 python compute_metrics.py --folder_name 6_lomo/ours_10

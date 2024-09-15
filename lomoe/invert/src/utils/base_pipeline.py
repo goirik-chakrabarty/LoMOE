@@ -1,4 +1,3 @@
-
 import torch
 import inspect
 from packaging import version
@@ -11,8 +10,6 @@ from diffusers.schedulers import KarrasDiffusionSchedulers
 from diffusers.utils import deprecate, is_accelerate_available, logging, randn_tensor, replace_example_docstring
 from diffusers import StableDiffusionPipeline
 from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
-
-
 
 class BasePipeline(DiffusionPipeline):
     _optional_components = ["safety_checker", "feature_extractor"]

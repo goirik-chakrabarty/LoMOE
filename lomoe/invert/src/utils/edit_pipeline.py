@@ -8,7 +8,6 @@ sys.path.insert(0, "src/utils")
 from base_pipeline import BasePipeline
 from cross_attention import prep_unet
 
-
 if torch.cuda.is_available():
     device = "cuda"
 else:

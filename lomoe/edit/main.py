@@ -11,7 +11,6 @@ from diffusers import AutoencoderKL, UNet2DConditionModel, DDIMScheduler
 
 logging.set_verbosity_error()
 
-
 def seed_everything(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -294,8 +293,8 @@ if __name__ == '__main__':
 
     device = torch.device('cuda')
 
-    ca_coef = opt.ca_coef #1.0
-    seg_coef = opt.seg_coef #1.75
+    ca_coef = opt.ca_coef
+    seg_coef = opt.seg_coef
 
     print(ca_coef, seg_coef)
 
@@ -343,62 +342,4 @@ if __name__ == '__main__':
         x_offset += im.size[0]
 
     if opt.save_path:
-        new_im.save(opt.save_path)    
-        
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=silver_o=llama_s=real/mask_1.png" --bg_prompt "a statue of a llama on display in a museum" --bg_negative "a statue of a llama on display in a museum" --fg_prompts "a silver giraffe" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/9/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/9/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --seed 66
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/10/mask_1.jpg" --bg_prompt "a cartoon fox driving a toy car" --bg_negative "a cartoon fox driving a toy car" --fg_prompts "small eyes" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/10/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/10/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --seed 66
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/add/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/add/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/add/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/add/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/add/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "a red dog collar" --seed 66 --save_path '1_add.png'
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/background/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/background/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/background/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 45 --latent '/home/prathosh/aditya/DirectInversion/output/background/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/background/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "a starry night background" --seed 66 --save_path '2_background.png'
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/change/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/change/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/change/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/change/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/change/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "a big pink yarn ball" --seed 66 --save_path '3_change.png'
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/color/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/color/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/color/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 25 --latent '/home/prathosh/aditya/DirectInversion/output/color/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/color/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "a blue lamb" --seed 66 --save_path '4_color.png'
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/material/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/material/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/material/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/material/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/material/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "bronze horse" --seed 66 --save_path '5_material.png'
-
-# python region_based_wml_efficient_direct.py --mask_paths "/home/prathosh/aditya/DirectInversion/assets/dataset/style/mask_1.jpg" --bg_prompt "/home/prathosh/aditya/DirectInversion/output/style/prompt/init_image.txt" --bg_negative "/home/prathosh/aditya/DirectInversion/output/style/prompt/init_image.txt" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20 --latent '/home/prathosh/aditya/DirectInversion/output/style/inversion/init_image.pt' --latent_list '/home/prathosh/aditya/DirectInversion/output/style/latentlist/init_image.pt' --rec_path 'out_rec.png' --edit_path 'out.png' --fg_prompts "a sketch of a cat" --seed 66 --save_path '6_style.png'
-
-####################################### Choosen ###################################################
-# Pig
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=black_o=pig_s=outdoor/mask_1.png" --bg_prompt "a small black pig standing on top of a red surface" --bg_negative "a small black pig standing on top of a red surface" --fg_prompts "a black and brown wild boar" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 30
-
-# Cat figurine
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=square_o=cat_s=real/mask_1.png" --bg_prompt "a cat figurine sitting on top of a plate" --bg_negative "a cat figurine sitting on top of a plate" --fg_prompts "a dog figurine" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 10
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=square_o=cat_s=real/mask_1.png" --bg_prompt "a cat figurine sitting on top of a plate" --bg_negative "a cat figurine sitting on top of a plate" --fg_prompts "a dog figurine" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 10
-
-# Group of horse - a=group_o=horse_s=indoor [not reconstructing]
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=group_o=horse_s=indoor/mask_2.png" --bg_prompt "a group of horses standing in a gym" --bg_negative "a group of horses standing in a gym" --fg_prompts "a zebra" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# Octopus - a=gray_o=octopus_s=outdoor
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=gray_o=octopus_s=outdoor/mask_1.png" --bg_prompt "an octopus figurine sitting on a wooden deck" --bg_negative "an octopus figurine sitting on a wooden deck" --fg_prompts "a colorful octopus with red dots" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# Metal Cat - a=metal_o=cat_s=outdoor
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=metal_o=cat_s=outdoor/mask_1.png" --bg_prompt "a silver cat statue sitting in the middle of a field" --bg_negative "a silver cat statue sitting in the middle of a field" --fg_prompts "a metal dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# Group of cats - a=orange_o=cat_s=real
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=orange_o=cat_s=real/mask_1.png" --bg_prompt "a group of cats standing around a tray of cupcakes" --bg_negative "a group of cats standing around a tray of cupcakes" --fg_prompts "an orange dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=orange_o=cat_s=real/mask_2.png" --bg_prompt "a group of cats standing around a tray of cupcakes" --bg_negative "a group of cats standing around a tray of cupcakes" --fg_prompts "an orange dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=orange_o=cat_s=real/mask_3.png" --bg_prompt "a group of cats standing around a tray of cupcakes" --bg_negative "a group of cats standing around a tray of cupcakes" --fg_prompts "an orange dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=orange_o=cat_s=real/mask_3.png" --bg_prompt "a group of cats standing around a tray of cupcakes" --bg_negative "a group of cats standing around a tray of cupcakes" --fg_prompts "a real orangish dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-
-# Metal llama - a=silver_o=llama_s=real
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/a=silver_o=llama_s=real/mask_1.png" --bg_prompt "a statue of a llama on display in a museum" --bg_negative "a statue of a llama on display in a museum" --fg_prompts "a silver giraffe" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# Bowl of fruit - ILSVRC2012_val_00000023
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/ILSVRC2012_val_00000023/mask_1.png" --bg_prompt "a group of green apples with stickers on them" --bg_negative "a group of green apples with stickers on them" --fg_prompts "an orange" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/ILSVRC2012_val_00000023/mask_1.png, /home/prathosh/aditya/benchmark/dino/masks/ILSVRC2012_val_00000023/mask_2.png" --bg_prompt "a group of green apples with stickers on them" --bg_negative "a group of green apples with stickers on them" --fg_prompts "an orange colored orange, a red pomegranate" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/ILSVRC2012_val_00000023/mask_1.png" --bg_prompt "a group of green apples with stickers on them" --bg_negative "a group of green apples with stickers on them" --fg_prompts "a red pomegranate" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/ILSVRC2012_val_00000023/mask_1.png" --bg_prompt "a group of green apples with stickers on them" --bg_negative "a group of green apples with stickers on them" --fg_prompts "a red apple" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# flickr_dog_000045
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_dog_000045/mask_1.png" --bg_prompt "a close up of a dog wearing a pink sweater" --bg_negative "a close up of a dog wearing a pink sweater" --fg_prompts "a smiling dog" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_dog_000045/mask_1.png" --bg_prompt "a close up of a dog wearing a pink sweater" --bg_negative "a close up of a dog wearing a pink sweater" --fg_prompts "a close up of a sad dog wearing a pink sweater" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_dog_000045/mask_1.png" --bg_prompt "a close up of a dog wearing a pink sweater" --bg_negative "a close up of a dog wearing a pink sweater" --fg_prompts "a cat with sunglasses" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_dog_000045/mask_1.png" --bg_prompt "a close up of a dog wearing a pink sweater" --bg_negative "a close up of a dog wearing a pink sweater" --fg_prompts "a cat with sunglasses and a party hat" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_dog_000045/mask_1.png" --bg_prompt "a close up of a dog wearing a pink sweater" --bg_negative "a close up of a dog wearing a pink sweater" --fg_prompts "a cat with sunglasses and a party hat on the head" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
-
-# flickr_wild_000504
-# python region_based_wml_efficient.py --mask_paths "/home/prathosh/aditya/benchmark/dino/masks/flickr_wild_000504/mask_1.png" --bg_prompt "a grey wolf staring at the camera in the snow" --bg_negative "a grey wolf staring at the camera in the snow" --fg_prompts "a leopard" --fg_negative "artifacts, blurry, smooth texture, bad quality, distortions, unrealistic, distorted image" --H 512 --W 512 --bootstrapping 20
+        new_im.save(opt.save_path)

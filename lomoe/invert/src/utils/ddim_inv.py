@@ -11,12 +11,10 @@ sys.path.insert(0, "src/utils")
 from utils.base_pipeline import BasePipeline
 from utils.cross_attention import prep_unet
 
-
 if torch.cuda.is_available():
     device = "cuda"
 else:
     device = "cpu"
-
 
 class DDIMInversion(BasePipeline):
 

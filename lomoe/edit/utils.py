@@ -2,7 +2,6 @@ import torch
 from diffusers.models.attention import CrossAttention
 
 def get_attention_scores(self, query, key, attention_mask=None):
-    # print('>>>>>>>>>>>>>>>>>>>>>>>>>>Hi')
     dtype = query.dtype
     if self.upcast_attention:
         query = query.float()
