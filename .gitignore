@@ -163,3 +163,4 @@ cython_debug/
 *.pt
 *.lock
 benchmark/data/
+.DS_Store
